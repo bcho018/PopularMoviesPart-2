@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <group android:checkableBehavior="single">
+        <item
+            app:showAsAction="never"
+            android:id="@+id/mostPopularMovies"
+            android:orderInCategory="1"
+            android:title="@string/mostPopularMovies"/>
+        <item
+            app:showAsAction="never"
+            android:id="@+id/mostTopRatedMovies"
+            android:orderInCategory="2"
+            android:title="@string/mostTopRatedMovies"/>
+        <item
+            app:showAsAction="never"
+            android:id="@+id/favoriteMovies"
+            android:orderInCategory="3"
+            android:title="YOUR FAVORITE MOVIES"/>
+
+
+    </group>
+</menu>

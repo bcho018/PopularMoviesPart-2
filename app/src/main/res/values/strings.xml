@@ -1,0 +1,7 @@
+<resources>
+    <string name="app_name">PopularMovie</string>
+    <string name="mostPopularMovies">MOST POPULAR MOVIES</string>
+    <string name="mostTopRatedMovies">MOST TOP RATED MOVIES</string>
+    <string name="trailer_text">Launch Trailer</string>
+    MOST_TOP_RATED_MOVIES
+</resources>
