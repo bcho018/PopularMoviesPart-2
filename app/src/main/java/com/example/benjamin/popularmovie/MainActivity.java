@@ -448,24 +448,27 @@ public class MainActivity extends AppCompatActivity implements AsyncResponse, Gr
             overview2[k] = null;
         }
         int i =0;
-        int count=movieCursor.getCount();
+        //cursor is not empty
+        if ((movieCursor != null)) {
 
-        if (movieCursor.moveToFirst()){
-            do{
+            int count = movieCursor.getCount();
+            if (movieCursor.moveToFirst()) {
+                do {
 
-                if (data.getString(data.getColumnIndex("posterPath")) != null) {
-                    id2[i] = data.getString(data.getColumnIndex("id"));
-                    posterPath2[i] = data.getString(data.getColumnIndex("posterPath"));
-                    title2[i] = data.getString(data.getColumnIndex("movieTitle"));
-                    releaseDate2[i] = data.getString(data.getColumnIndex("releaseDate"));
-                    voteAverage2[i]=data.getString(data.getColumnIndex("voteAverage"));
-                    overview2[i]=data.getString(data.getColumnIndex("overview"));
+                    if (data.getString(data.getColumnIndex("posterPath")) != null) {
+                        id2[i] = data.getString(data.getColumnIndex("id"));
+                        posterPath2[i] = data.getString(data.getColumnIndex("posterPath"));
+                        title2[i] = data.getString(data.getColumnIndex("movieTitle"));
+                        releaseDate2[i] = data.getString(data.getColumnIndex("releaseDate"));
+                        voteAverage2[i] = data.getString(data.getColumnIndex("voteAverage"));
+                        overview2[i] = data.getString(data.getColumnIndex("overview"));
 
-                    i=i+1;
-                }
-            }while(data.moveToNext());
+                        i = i + 1;
+                    }
+                } while (data.moveToNext());
+            }
+            totalFavorite = count;
         }
-        totalFavorite = count;
         //##########################################################
 
         // Update the data that the adapter uses to create ViewHolders
