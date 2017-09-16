@@ -484,8 +484,9 @@ public class MainActivity extends AppCompatActivity implements AsyncResponse, Gr
 
         }
 
-        data.close();
-        movieCursor.close();
+        if (data != null) {data.close();}
+
+        if (movieCursor != null) {movieCursor.close();}
 
     }
 
