@@ -5,6 +5,7 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.Parcelable;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.AsyncTaskLoader;
 import android.support.v4.content.Loader;
@@ -71,6 +72,10 @@ public class MainActivity extends AppCompatActivity implements AsyncResponse, Gr
     private static final int MOVIE_LOADER_ID = 10;
 
 
+    // some transient state for the activity instance
+    private String SORT_TYPE;
+    private String SAVED_LAYOUT_MANAGER;
+    private Parcelable layoutManagerSavedState;
 
     JSONObject jsonObject = new JSONObject();
     @Override
@@ -101,12 +106,22 @@ public class MainActivity extends AppCompatActivity implements AsyncResponse, Gr
         //Step 1.5
         boolean connected = NetworkUtils.isNetworkAvailable(MainActivity.this);
 
+        //The if statement grabs the value that was saved from onSaveInstanceState to restore previous settings
+        if (savedInstanceState != null) {
+            sortType = savedInstanceState.getString(SORT_TYPE);
+            layoutManagerSavedState = savedInstanceState.getParcelable(SAVED_LAYOUT_MANAGER);
+        }
 
         if (connected == true) {
             //Step 2
             //default sort
-            String sort = "topRated";
-            displayMovie(sort);
+            if (sortType == null) {
+                sortType = "topRated";
+                displayMovie();
+            } else {
+                displayMovie();
+            }
+
         } else if(connected == false) {
 
             //Implement a toast
@@ -119,11 +134,30 @@ public class MainActivity extends AppCompatActivity implements AsyncResponse, Gr
             mToast.show();
         }
 
+        //Return to the original scrollview
+        if (layoutManagerSavedState != null) {
+            mRecyclerViewImage.getLayoutManager().onRestoreInstanceState(layoutManagerSavedState);
+        }
+
+
         //Initialize loader to load all the favorite movies into a list so that the detail page can be altered accordingly
         getSupportLoaderManager().restartLoader(MOVIE_LOADER_ID, null, this);
     }
+    @Override
+    public void onSaveInstanceState(Bundle savedInstanceState) {
 
-    public void testDB(View v) {
+        savedInstanceState.putString(SORT_TYPE, sortType);
+
+        savedInstanceState.putParcelable(SAVED_LAYOUT_MANAGER, mRecyclerViewImage.getLayoutManager().onSaveInstanceState());
+
+        // call superclass to save any view hierarchy
+        super.onSaveInstanceState(savedInstanceState);
+
+    }
+
+
+
+    final private void testDB(View v) {
 
         // Create a DB helper (this will create the DB if run for the first time)
         MovieDBHelper dbHelper = new MovieDBHelper(this);
@@ -158,17 +192,17 @@ public class MainActivity extends AppCompatActivity implements AsyncResponse, Gr
                 MovieContract.MovieEntry.COLUMN_MOVIE_ID
         );
     }
-    private void displayMovie(String sort) {
+    private void displayMovie() {
 
         //String testString="https://api.themoviedb.org/3/movie/550?api_key=1d44bd6687107c4f8911b50d1bd5b29d";
         String topRated = "https://api.themoviedb.org/3/movie/top_rated?api_key=" + apiKey + "&language=en-US&page=1\n";
         String mostPopular = "https://api.themoviedb.org/3/movie/popular?api_key=" + apiKey + "&language=en-US&page=1";
 
-        if(sort == "mostPopular") {
+        if(sortType == "mostPopular") {
             urlString=mostPopular;
-        } else if (sort=="topRated") {
+        } else if (sortType=="topRated") {
             urlString=topRated;
-        } else if (sort =="favoriteMovies") {
+        } else if (sortType =="favoriteMovies") {
 
             //Steps to load the favoriteMovies stored in the database
             //Step 1: Query the content of the table: "movieList"
@@ -203,17 +237,17 @@ public class MainActivity extends AppCompatActivity implements AsyncResponse, Gr
         switch (item.getItemId()) {
             case R.id.mostPopularMovies:
                 sortType = "mostPopular";
-                displayMovie(sortType);
+                displayMovie();
                 item.setChecked(true);
                 return true;
             case R.id.mostTopRatedMovies:
                 sortType = "topRated";
-                displayMovie(sortType);
+                displayMovie();
                 item.setChecked(true);
                 return true;
             case R.id.favoriteMovies:
                 sortType = "favoriteMovies";
-                displayMovie(sortType);
+                displayMovie();
                 item.setChecked(true);
                 return true;
 
