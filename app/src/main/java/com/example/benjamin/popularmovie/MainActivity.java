@@ -112,6 +112,8 @@ public class MainActivity extends AppCompatActivity implements AsyncResponse, Gr
             layoutManagerSavedState = savedInstanceState.getParcelable(SAVED_LAYOUT_MANAGER);
         }
 
+
+
         if (connected == true) {
             //Step 2
             //default sort
@@ -134,10 +136,6 @@ public class MainActivity extends AppCompatActivity implements AsyncResponse, Gr
             mToast.show();
         }
 
-        //Return to the original scrollview
-        if (layoutManagerSavedState != null) {
-            mRecyclerViewImage.getLayoutManager().onRestoreInstanceState(layoutManagerSavedState);
-        }
 
 
         //Initialize loader to load all the favorite movies into a list so that the detail page can be altered accordingly
@@ -356,6 +354,12 @@ public class MainActivity extends AppCompatActivity implements AsyncResponse, Gr
             //Send moviePathList to the RecycleView
             mAdapter.setWeatherData(moviePathList);
         }
+
+        //Return to the original scrollview
+        if (layoutManagerSavedState != null) {
+            mRecyclerViewImage.getLayoutManager().onRestoreInstanceState(layoutManagerSavedState);
+        }
+
     }
 
 
