@@ -108,10 +108,9 @@ public class MainActivity extends AppCompatActivity implements AsyncResponse, Gr
 
         //The if statement grabs the value that was saved from onSaveInstanceState to restore previous settings
         if (savedInstanceState != null) {
-            sortType = savedInstanceState.getString(SORT_TYPE);
+            sortType = savedInstanceState.getString("SORT_TYPE");
             layoutManagerSavedState = savedInstanceState.getParcelable(SAVED_LAYOUT_MANAGER);
         }
-
 
 
         if (connected == true) {
@@ -141,10 +140,19 @@ public class MainActivity extends AppCompatActivity implements AsyncResponse, Gr
         //Initialize loader to load all the favorite movies into a list so that the detail page can be altered accordingly
         getSupportLoaderManager().restartLoader(MOVIE_LOADER_ID, null, this);
     }
+
+    @Override
+    public void onRestoreInstanceState(Bundle savedInstanceState) {
+
+        super.onRestoreInstanceState(savedInstanceState);
+
+
+
+    }
     @Override
     public void onSaveInstanceState(Bundle savedInstanceState) {
 
-        savedInstanceState.putString(SORT_TYPE, sortType);
+        savedInstanceState.putString("SORT_TYPE", sortType);
 
         savedInstanceState.putParcelable(SAVED_LAYOUT_MANAGER, mRecyclerViewImage.getLayoutManager().onSaveInstanceState());
 
